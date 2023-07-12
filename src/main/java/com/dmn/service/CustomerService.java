@@ -83,6 +83,20 @@ public class CustomerService {
         return customerRepository.findAllBygrade(grade);
     }
 
+    public List<Customer> getAllCustByGradeWithQuery(Integer grade) {
+       return customerRepository.getAllCustomerByQuery(grade);
+    }
+
+//    public CustomerDTO getCustomerDTObyId(Long id) {
+//        Customer foundCustomer=getCustomerById(id);
+//
+//        CustomerDTO customerDTO=new CustomerDTO(foundCustomer);
+//        return customerDTO;
+//
+//    }
+
+
+
 //    public void saveCustomer(Customer customer) {
 //
 
@@ -91,14 +105,31 @@ public class CustomerService {
 //    }
 
 
+    //Studentin DTO ya maplenme islemini JPQL ile yapsak
+
+
+//    public CustomerDTO getCustomerDTObyId(Long id) {
+//        Customer foundCustomer=getCustomerById(id);
+//
+//        CustomerDTO customerDTO=new CustomerDTO(foundCustomer);
+//        return customerDTO;
+//
+//    }
 
 
 
 
 
 
+    public CustomerDTO getCustomerDTObyId(Long id) {
+
+        CustomerDTO customerDTO=customerRepository.findByIdCustomerDTOWithJPQL(id).orElseThrow(()->
+                new CustomerNotFoundException("This CustomerDTO not found by ID : "+id));
 
 
+        return customerDTO;
+
+    }
 
 
 

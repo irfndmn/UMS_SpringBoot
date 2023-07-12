@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,9 +49,6 @@ public class CustomerController {
     }
 
 
-
-
-
     @PostMapping
     public ResponseEntity<Map<String,String>> createCustomer(@Valid @RequestBody Customer customer){
 
@@ -77,8 +75,6 @@ public class CustomerController {
 
 
 
-
-
     @GetMapping("/query")
     public ResponseEntity<Customer> getCustomer(@RequestParam("id") Long id ){
 
@@ -87,7 +83,6 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
 
     }
-
 
 
     @DeleteMapping("/{id}")
@@ -100,9 +95,6 @@ public class CustomerController {
         return new ResponseEntity<>(response,HttpStatus.OK);
 
     }
-
-
-
 
 
 
@@ -124,8 +116,6 @@ public class CustomerController {
 
 
 
-
-
     //pagiantion (sayfalandirma)
 //
 //    @GetMapping("/page")
@@ -143,16 +133,12 @@ public class CustomerController {
 
 
 
-
-
-
-
     //pagiantion (sayfalandirma)
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Customer>> getCustomerByPage(@RequestParam("page") int page,   //hangi page gosterilsin
-                                                            @RequestParam("size") int size,  // her bir page te kac kayit bulunsun
-                                                            @RequestParam("sort") String prop, // kayitlar hangi filde gore
+    public ResponseEntity<Page<Customer>> getCustomerByPage(@RequestParam(value="page", required = false,defaultValue = "0") int page,   //bu sekilde zorunluluk kaldirip default deger atamamizi sagliyo
+                                                            @RequestParam(value="size", required = false, defaultValue = "2") int size,  // her bir page te kac kayit bulunsun
+                                                            @RequestParam("sort") String prop, // kayitlar hangi fielde gore
                                                             @RequestParam("direction")Sort.Direction direction){  //yon
 
         Pageable pageable= PageRequest.of(page,size,Sort.by(direction,prop));
@@ -161,10 +147,6 @@ public class CustomerController {
         return new ResponseEntity<>(allCus,HttpStatus.OK);
 
     }
-
-
-
-
 
 
 
@@ -179,9 +161,7 @@ public class CustomerController {
 
     }
 
-
-
-    @GetMapping("/gradequery/{grade}")
+    @GetMapping("/gradeq/{grade}")
     public ResponseEntity<List<Customer>> getAllCustByGrade(@PathVariable("grade") Integer grade){
 
 
@@ -189,8 +169,57 @@ public class CustomerController {
 
         return ResponseEntity.ok(customerList);
 
+    }
+
+
+
+    @GetMapping("/gradequery/{grade}")
+    public ResponseEntity<List<Customer>> getAllCustByGradeQuery(@PathVariable("grade") Integer grade){
+
+
+        //List<Customer> customerList=customerService.getAllCustByGrade(grade);
+
+        List<Customer> customerList=customerService.getAllCustByGradeWithQuery(grade);
+
+        return ResponseEntity.ok(customerList);
 
     }
+
+
+
+
+
+
+
+    // id si verilen bir customer i customerDTO olarak dondurelim
+
+    @GetMapping("/bydto/{id}")
+    public ResponseEntity<CustomerDTO> getCustDTObyId(@PathVariable("id") Long id){
+
+
+
+        CustomerDTO customerDTO=customerService.getCustomerDTObyId(id);
+
+       return new ResponseEntity<>(customerDTO,HttpStatus.OK);
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

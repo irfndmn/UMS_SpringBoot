@@ -1,5 +1,6 @@
 package com.dmn.dto;
 
+import com.dmn.domain.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerDTO {
+
+
+
 
     @NotBlank(message = "name can not be space")
     @Size(min = 2, max = 25, message = "name '${validatedValue} must be between {min} and {max}")
@@ -30,4 +34,15 @@ public class CustomerDTO {
     private String email;
 
     private String phoneNumber;
+
+
+
+
+    public CustomerDTO(Customer customer) {
+        this.name= customer.getName();
+        this.lastname=customer.getLastname();
+        this.grade=customer.getGrade();
+        this.email=customer.getEmail();
+        this.phoneNumber=customer.getPhoneNumber();
+    }
 }
