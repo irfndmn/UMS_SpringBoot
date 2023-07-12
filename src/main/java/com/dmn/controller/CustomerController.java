@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,13 +35,11 @@ public class CustomerController {
     }
 
 
-
-
     // http://localhost:8080/customers +GET
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getCustomers(){
-        List<Customer> customers=customerService.getAllCustomer();
+    public ResponseEntity<List<Customer>> getCustomers() {
+        List<Customer> customers = customerService.getAllCustomer();
         //return new ResponseEntity<>(customers, HttpStatus.OK );
         return ResponseEntity.ok(customers);
 
@@ -50,35 +47,31 @@ public class CustomerController {
 
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> createCustomer(@Valid @RequestBody Customer customer){
+    public ResponseEntity<Map<String, String>> createCustomer(@Valid @RequestBody Customer customer) {
 
         customerService.saveCustomer(customer);
 
-        Map<String,String> response=new HashMap<>();
-        response.put("message","Customer has added successfully...");
-        response.put("status","Successfull");
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Customer has added successfully...");
+        response.put("status", "Successfull");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
-
-
-
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomer1(@PathVariable("id") Long id ){       /// GetCustomerById with using @PathVariable("id") annotation
+    public ResponseEntity<Customer> getCustomer1(@PathVariable("id") Long id) {       /// GetCustomerById with using @PathVariable("id") annotation
 
-        Customer customer=customerService.getCustomerById(id);
+        Customer customer = customerService.getCustomerById(id);
 
         return ResponseEntity.ok(customer);
 
     }
 
 
-
     @GetMapping("/query")
-    public ResponseEntity<Customer> getCustomer(@RequestParam("id") Long id ){
+    public ResponseEntity<Customer> getCustomer(@RequestParam("id") Long id) {
 
-        Customer customer=customerService.getCustomerById(id);
+        Customer customer = customerService.getCustomerById(id);
 
         return ResponseEntity.ok(customer);
 
@@ -86,140 +79,95 @@ public class CustomerController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String,String>> deletedCustomer(@PathVariable("id") Long id){
+    public ResponseEntity<Map<String, String>> deletedCustomer(@PathVariable("id") Long id) {
 
         customerService.deleteById(id);
-        Map<String,String> response=new HashMap<>();
-        response.put("message","Customer has deleted successfully...");
-        response.put("status","Successfull");
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Customer has deleted successfully...");
+        response.put("status", "Successfull");
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-
-
 
 
     // belirli bir id ile customeri update etme(sadece name , lastname , grade, email, phonenumber )
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String,String>> updateCustom(@PathVariable("id") Long id,
-                                                           @Valid @RequestBody CustomerDTO customerDTO ){
+    public ResponseEntity<Map<String, String>> updateCustom(@PathVariable("id") Long id,
+                                                            @Valid @RequestBody CustomerDTO customerDTO) {
 
-        customerService.updateCustomerById(id,customerDTO);
-        Map<String,String> response=new HashMap<>();
-        response.put("message","Customer has updated successfully...");
-        response.put("status","Successfull");
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        customerService.updateCustomerById(id, customerDTO);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Customer has updated successfully...");
+        response.put("status", "Successfull");
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-
-
-
-
-    //pagiantion (sayfalandirma)
-//
-//    @GetMapping("/page")
-//    public ResponseEntity<Page<Customer>> getCustomerByPage(@RequestParam("page") int page,   //hangi page gosterilsin
-//                                                                  @RequestParam("size") int size,  // her bir page te kac kayit bulunsun
-//                                                                  @RequestParam("sort") String prop, // kayitlar hangi filde gore
-//                                                                  @RequestParam("direction")Sort.Direction direction){  //yon
-//
-//        Pageable pageable= PageRequest.of(page,size,Sort.by(direction,prop));
-//        Page<Customer> allCus=customerService.getAllCustmByPaging(pageable);
-//
-//        return new ResponseEntity<>(allCus,HttpStatus.OK);
-//
-//    }
-
 
 
     //pagiantion (sayfalandirma)
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Customer>> getCustomerByPage(@RequestParam(value="page", required = false,defaultValue = "0") int page,   //bu sekilde zorunluluk kaldirip default deger atamamizi sagliyo
-                                                            @RequestParam(value="size", required = false, defaultValue = "2") int size,  // her bir page te kac kayit bulunsun
+    public ResponseEntity<Page<Customer>> getCustomerByPage(@RequestParam(value = "page", required = false, defaultValue = "0") int page,   //bu sekilde zorunluluk kaldirip default deger atamamizi sagliyo
+                                                            @RequestParam(value = "size", required = false, defaultValue = "2") int size,  // her bir page te kac kayit bulunsun
                                                             @RequestParam("sort") String prop, // kayitlar hangi fielde gore
-                                                            @RequestParam("direction")Sort.Direction direction){  //yon
+                                                            @RequestParam("direction") Sort.Direction direction) {  //yon
 
-        Pageable pageable= PageRequest.of(page,size,Sort.by(direction,prop));
-        Page<Customer> allCus=customerService.getAllCustmByPaging(pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+        Page<Customer> allCus = customerService.getAllCustmByPaging(pageable);
 
-        return new ResponseEntity<>(allCus,HttpStatus.OK);
+        return new ResponseEntity<>(allCus, HttpStatus.OK);
 
     }
-
 
 
     //lastname ile customerlari getirme
 
     @GetMapping("/lastnamequery")
-    public ResponseEntity<List<Customer>> getCusByLastName(@RequestParam("lastname")String lastname){
+    public ResponseEntity<List<Customer>> getCusByLastName(@RequestParam("lastname") String lastname) {
 
-        List<Customer> customer=customerService.getCustomerBylasName(lastname);
+        List<Customer> customer = customerService.getCustomerBylasName(lastname);
 
-        return new ResponseEntity<>(customer,HttpStatus.OK);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
 
     }
 
     @GetMapping("/gradeq/{grade}")
-    public ResponseEntity<List<Customer>> getAllCustByGrade(@PathVariable("grade") Integer grade){
+    public ResponseEntity<List<Customer>> getAllCustByGrade(@PathVariable("grade") Integer grade) {
 
 
-        List<Customer> customerList=customerService.getAllCustByGrade(grade);
+        List<Customer> customerList = customerService.getAllCustByGrade(grade);
 
         return ResponseEntity.ok(customerList);
 
     }
 
 
-
     @GetMapping("/gradequery/{grade}")
-    public ResponseEntity<List<Customer>> getAllCustByGradeQuery(@PathVariable("grade") Integer grade){
+    public ResponseEntity<List<Customer>> getAllCustByGradeQuery(@PathVariable("grade") Integer grade) {
 
 
         //List<Customer> customerList=customerService.getAllCustByGrade(grade);
 
-        List<Customer> customerList=customerService.getAllCustByGradeWithQuery(grade);
+        List<Customer> customerList = customerService.getAllCustByGradeWithQuery(grade);
 
         return ResponseEntity.ok(customerList);
 
     }
-
-
-
-
-
 
 
     // id si verilen bir customer i customerDTO olarak dondurelim
 
     @GetMapping("/bydto/{id}")
-    public ResponseEntity<CustomerDTO> getCustDTObyId(@PathVariable("id") Long id){
+    public ResponseEntity<CustomerDTO> getCustDTObyId(@PathVariable("id") Long id) {
 
 
+        CustomerDTO customerDTO = customerService.getCustomerDTObyId(id);
 
-        CustomerDTO customerDTO=customerService.getCustomerDTObyId(id);
-
-       return new ResponseEntity<>(customerDTO,HttpStatus.OK);
-
+        return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

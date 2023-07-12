@@ -25,7 +25,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 //    //JpaRepository<Entity Class DT,ID nin data type>
 
 
-    //SQL
+    //SQL  Custom native query
 
     @Query(value = "SELECT * FROM customer c WHERE c.grade=:pGrade", nativeQuery = true)
     List<Customer> getAllCustomerByQuery(@Param("pGrade") Integer grade);
@@ -36,16 +36,6 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
     @Query("SELECT new com.dmn.dto.CustomerDTO(c) FROM Customer c WHERE c.id=:pId")
     Optional<CustomerDTO> findByIdCustomerDTOWithJPQL(@Param("pId") Long id);
-
-
-
-
-
-
-
-
-
-
 
 
 
